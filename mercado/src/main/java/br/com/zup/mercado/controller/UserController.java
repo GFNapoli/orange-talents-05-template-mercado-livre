@@ -10,23 +10,23 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.zup.mercado.entity.Client;
-import br.com.zup.mercado.form.ClientForm;
-import br.com.zup.mercado.repository.ClientRepository;
+import br.com.zup.mercado.entity.User;
+import br.com.zup.mercado.form.UserForm;
+import br.com.zup.mercado.repository.UserRepository;
 
 @RestController
-@RequestMapping("/client")
-public class ClientController {
+@RequestMapping("/user")
+public class UserController {
 
 	@Autowired
-	private ClientRepository repository;
+	private UserRepository repository;
 	
 	@PostMapping
 	@Transactional
-	public ResponseEntity<?> registerClient(@RequestBody @Valid ClientForm form){
+	public ResponseEntity<?> registerUser(@RequestBody @Valid UserForm form){
 		
-		Client client = form.converter();
-		repository.save(client);
+		User user = form.converter();
+		repository.save(user);
 		
 		return ResponseEntity.ok().build();
 	}

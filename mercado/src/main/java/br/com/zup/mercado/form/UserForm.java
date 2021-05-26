@@ -5,14 +5,14 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 import br.com.zup.mercado.annotation.UniqueValue;
-import br.com.zup.mercado.entity.Client;
+import br.com.zup.mercado.entity.User;
 import br.com.zup.mercado.security.CleanPassword;
 
-public class ClientForm {
+public class UserForm {
 
 	@NotBlank
 	@Email
-	@UniqueValue(domainClass = Client.class, fieldName = "login")
+	@UniqueValue(domainClass = User.class, fieldName = "login")
 	private String login;
 	
 	@NotBlank
@@ -32,7 +32,7 @@ public class ClientForm {
 		this.password = password;
 	}
 	
-	public Client converter() {
-		return new Client(login, new CleanPassword(password));
+	public User converter() {
+		return new User(login, new CleanPassword(password));
 	}
 }

@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -13,7 +14,8 @@ import javax.validation.constraints.Size;
 import br.com.zup.mercado.security.CleanPassword;
 
 @Entity
-public class Client {
+@Table(name = "client")
+public class User {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -28,7 +30,7 @@ public class Client {
 	private String password;
 	private LocalDateTime instant = LocalDateTime.now();
 	
-	public Client(@NotBlank @Email String login, CleanPassword cleanPassword) {
+	public User(@NotBlank @Email String login, CleanPassword cleanPassword) {
 		this.login = login;
 		this.password = cleanPassword.hash();
 	}
