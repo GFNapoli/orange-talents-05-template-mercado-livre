@@ -10,7 +10,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import br.com.zup.mercado.security.CleanPassword;
 
 @Entity
 public class Client {
@@ -28,15 +28,9 @@ public class Client {
 	private String password;
 	private LocalDateTime instant = LocalDateTime.now();
 	
-	public Client(@NotBlank @Email String login, @NotBlank String password) {
+	public Client(@NotBlank @Email String login, CleanPassword cleanPassword) {
 		this.login = login;
-		this.password = encodPassword(password);
-		System.out.println("gustavo-> "+password);
-	}
-	
-	public String encodPassword(String password) {
-		
-		return new BCryptPasswordEncoder().encode(password);
+		this.password = cleanPassword.hash();
 	}
 	
 }
