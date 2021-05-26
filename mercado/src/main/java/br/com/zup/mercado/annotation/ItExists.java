@@ -10,12 +10,12 @@ import javax.validation.Constraint;
 import javax.validation.Payload;
 
 @Documented
-@Constraint(validatedBy = UniqueValueValidator.class)
+@Constraint(validatedBy = ItExistsValidator.class)
 @Target({ ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface UniqueValue {
+public @interface ItExists {
 
-	String message() default "Usuario já cadastrado!";
+	String message() default "Item não encontrado!";
 	
 	Class<?>[] groups() default {};
 	
