@@ -16,11 +16,11 @@ import br.com.zup.mercado.repository.UserRepository;
 
 public class AuthenticationByTokenFilter extends OncePerRequestFilter{
 	
-	private TokenService tokenService;
+	private TokenGenerator tokenGenerator;
 	private UserRepository repository;
 	
-	public AuthenticationByTokenFilter(TokenService tokenService, UserRepository repository) {
-		this.tokenService = tokenService;
+	public AuthenticationByTokenFilter(TokenGenerator tokenGenerator, UserRepository repository) {
+		this.tokenGenerator = tokenGenerator;
 		this.repository = repository;
 	}
 
@@ -29,7 +29,7 @@ public class AuthenticationByTokenFilter extends OncePerRequestFilter{
 			throws ServletException, IOException {
 		
 		String token = recoverToken(request);
-		boolean valid = tokenService.isTokenValid(token);
+		boolean valid = tokenGenerator.isTokenValid(token);
 		System.out.println("gustavo-> "+valid+" = "+token);
 		if(valid) {
 			authUser(token);
@@ -39,7 +39,7 @@ public class AuthenticationByTokenFilter extends OncePerRequestFilter{
 	
 	private void authUser(String token) {
 		
-		Long idUser = tokenService.getUserId(token);
+		Long idUser = tokenGenerator.getUserId(token);
 		User user = repository.findById(idUser).get();
 		System.out.println(user);
 		UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(user,null, user.getAuthorities());

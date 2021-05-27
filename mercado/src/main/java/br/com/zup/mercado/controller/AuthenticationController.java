@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.zup.mercado.dto.TokenDto;
 import br.com.zup.mercado.form.LoginForm;
-import br.com.zup.mercado.security.config.TokenService;
+import br.com.zup.mercado.security.config.TokenGenerator;
 
 @RestController
 @RequestMapping("/auth")
@@ -24,7 +24,7 @@ public class AuthenticationController {
 	private AuthenticationManager authManager;
 	
 	@Autowired
-	private TokenService tokenService;
+	private TokenGenerator tokenGenerator;
 	
 	@PostMapping
 	public ResponseEntity<?> authentication(@RequestBody @Valid LoginForm form){
@@ -33,7 +33,7 @@ public class AuthenticationController {
 		
 		try {
 			Authentication authetication = authManager.authenticate(loginData);
-			String token = tokenService.gerateToken(authetication);
+			String token = tokenGenerator.gerateToken(authetication);
 			return ResponseEntity.ok(new TokenDto("Bearer", token));
 			
 		} catch (Exception e) {

@@ -21,13 +21,13 @@ import br.com.zup.mercado.repository.UserRepository;
 public class SecurityConfigurations extends WebSecurityConfigurerAdapter{
 
 	@Autowired
-	private TokenService tokenService;
+	private TokenGenerator tokenGenerator;
 	
 	@Autowired
 	private UserRepository userRepository;
 	
 	@Autowired
-	private AuthenticationService authenticationService;
+	private UserAuthentication userAuthentication;
 	
 	@Override
 	@Bean
@@ -37,7 +37,7 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter{
 	
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		auth.userDetailsService(authenticationService).passwordEncoder(new BCryptPasswordEncoder());
+		auth.userDetailsService(userAuthentication).passwordEncoder(new BCryptPasswordEncoder());
 	}
 	
 	@Override
@@ -48,7 +48,7 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter{
 		.anyRequest().authenticated()
 		.and().csrf().disable()
 		.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-		.and().addFilterBefore(new AuthenticationByTokenFilter(tokenService, userRepository), UsernamePasswordAuthenticationFilter.class);
+		.and().addFilterBefore(new AuthenticationByTokenFilter(tokenGenerator, userRepository), UsernamePasswordAuthenticationFilter.class);
 	}
 	
 	@Override
