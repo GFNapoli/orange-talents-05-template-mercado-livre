@@ -24,6 +24,7 @@ import org.springframework.util.Assert;
 import com.sun.istack.NotNull;
 
 import br.com.zup.mercado.form.FeatureForm;
+import br.com.zup.mercado.form.ImagesForm;
 
 @Entity
 public class Product {
@@ -56,6 +57,9 @@ public class Product {
 	
 	@ManyToOne
 	private User user;
+	
+	@OneToMany(mappedBy = "product", cascade = CascadeType.MERGE)
+	private Set<ProductImages> images = new HashSet<ProductImages>();
 
 	
 	
@@ -70,6 +74,9 @@ public class Product {
 		this.features.addAll(features.stream().map(feature -> feature.toModel(this)).collect(Collectors.toSet()));
 		
 		Assert.isTrue(this.features.size() >= 3, "Precisa de pelo menos 3 caracteristicas");
+	}
+	
+	public Product() {
 	}
 
 	public Long getId() {
@@ -106,6 +113,12 @@ public class Product {
 
 	public User getUser() {
 		return user;
+	}
+
+	public void addImages(Set<String> urls, ImagesForm form) {
+		
+		this.images.addAll(urls.stream().map(image -> form.toModel(image, this)).collect(Collectors.toSet()));
+		
 	}
 	
 }

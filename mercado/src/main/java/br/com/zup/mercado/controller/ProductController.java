@@ -1,7 +1,9 @@
 package br.com.zup.mercado.controller;
 
 import java.util.Optional;
+import java.util.Set;
 
+import javax.persistence.EntityManager;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +23,8 @@ import br.com.zup.mercado.controller.validate.ForbiddenEqualsFeatures;
 import br.com.zup.mercado.entity.Category;
 import br.com.zup.mercado.entity.Product;
 import br.com.zup.mercado.entity.User;
+import br.com.zup.mercado.fake.FakeUploader;
+import br.com.zup.mercado.form.ImagesForm;
 import br.com.zup.mercado.form.ProductForm;
 import br.com.zup.mercado.repository.CategoryRepository;
 import br.com.zup.mercado.repository.ProductRepository;
@@ -30,6 +35,9 @@ import br.com.zup.mercado.repository.UserRepository;
 public class ProductController {
 	
 	@Autowired
+	private EntityManager manager;
+	
+	@Autowired
 	private ProductRepository repository;
 	
 	@Autowired
@@ -38,7 +46,10 @@ public class ProductController {
 	@Autowired
 	private UserRepository userRepository;
 	
-	@InitBinder
+	@Autowired
+	private FakeUploader uploader;
+	
+	@InitBinder(value = "productForm")
 	public void init(WebDataBinder dataBinder) {
 		dataBinder.addValidators(new ForbiddenEqualsFeatures());
 	}
@@ -58,6 +69,27 @@ public class ProductController {
 		
 		Product product = form.converter(category.get(), user.get());
 		repository.save(product);
+		return ResponseEntity.ok().build();
+	}
+	
+	@PostMapping(value = "/{id}/imagens")
+	@Transactional
+	public ResponseEntity<?> addImage(@PathVariable("id") Long id, @Valid ImagesForm form){
+		
+		Set<String> urls = uploader.send(form.getImages());
+		
+		Optional<Product> product = repository.findById(id);
+		
+		if(product.isEmpty())return ResponseEntity.notFound().build();
+		
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		String userLogin = ((UserDetails)principal).getUsername();
+		System.out.println("gustavo -> " + userLogin.equalsIgnoreCase(product.get().getUser().getLogin()) );
+		if(!userLogin.equalsIgnoreCase(product.get().getUser().getLogin())) return ResponseEntity.badRequest().build();
+		
+		product.get().addImages(urls, form);
+		manager.merge(product.get());
+		
 		return ResponseEntity.ok().build();
 	}
 }
