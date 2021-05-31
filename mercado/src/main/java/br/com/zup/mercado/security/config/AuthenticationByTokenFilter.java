@@ -30,7 +30,6 @@ public class AuthenticationByTokenFilter extends OncePerRequestFilter{
 		
 		String token = recoverToken(request);
 		boolean valid = tokenGenerator.isTokenValid(token);
-		System.out.println("gustavo-> "+valid+" = "+token);
 		if(valid) {
 			authUser(token);
 		}
@@ -41,11 +40,8 @@ public class AuthenticationByTokenFilter extends OncePerRequestFilter{
 		
 		Long idUser = tokenGenerator.getUserId(token);
 		User user = repository.findById(idUser).get();
-		System.out.println(user);
 		UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(user,null, user.getAuthorities());
-		System.out.println("Gustavo olha-> "+authentication.isAuthenticated()); 
 		SecurityContextHolder.getContext().setAuthentication(authentication);
-		System.out.println("Gustavo olha2-> "+authentication.isAuthenticated());
 	}
 
 	private String recoverToken(HttpServletRequest request) {
