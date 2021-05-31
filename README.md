@@ -4,10 +4,10 @@
 - [x] Nao pode ter usuario com o mesmo email
 - [x] Cadastro categoria
 - [x] Trabalhando com usuario logado
-- [ ] Usuario logado cadastra produto
-- [ ] Adiciona imagem produto
-- [ ] Adiciona opiniao sobre produto
-- [ ] Faça uma pergunta
+- [x] Usuario logado cadastra produto
+- [x] Adiciona imagem produto
+- [x] Adiciona opiniao sobre produto
+- [x] Faça uma pergunta
 - [ ] Codigo para pagina detalhe
 - [ ] Finaliza compra parte 1
 - [ ] Finaliza compra parte 2
