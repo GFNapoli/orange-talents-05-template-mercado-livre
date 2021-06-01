@@ -12,6 +12,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,14 +21,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.zup.mercado.controller.validate.ForbiddenEqualsFeatures;
+import br.com.zup.mercado.dto.DetailProductDto;
 import br.com.zup.mercado.entity.Category;
+import br.com.zup.mercado.entity.Opinion;
 import br.com.zup.mercado.entity.Product;
+import br.com.zup.mercado.entity.Question;
 import br.com.zup.mercado.entity.User;
 import br.com.zup.mercado.fake.FakeUploader;
 import br.com.zup.mercado.form.ImagesForm;
 import br.com.zup.mercado.form.ProductForm;
 import br.com.zup.mercado.repository.CategoryRepository;
+import br.com.zup.mercado.repository.OpinionRepository;
 import br.com.zup.mercado.repository.ProductRepository;
+import br.com.zup.mercado.repository.QuestionRepository;
 import br.com.zup.mercado.repository.UserRepository;
 
 @RestController
@@ -48,6 +54,12 @@ public class ProductController {
 	
 	@Autowired
 	private FakeUploader uploader;
+	
+	@Autowired
+	private OpinionRepository opinionRepository;
+	
+	@Autowired
+	private QuestionRepository questionRepository;
 	
 	@InitBinder(value = "productForm")
 	public void init(WebDataBinder dataBinder) {
@@ -91,5 +103,18 @@ public class ProductController {
 		manager.merge(product.get());
 		
 		return ResponseEntity.ok().build();
+	}
+	
+	@GetMapping("/{id}")
+	public ResponseEntity<?> productDetail(@PathVariable Long id){
+		
+		Optional<Product> product = repository.findById(id);
+		
+		if(product.isEmpty()) return ResponseEntity.badRequest().build();
+		
+		Iterable<Opinion> opinions = opinionRepository.findByProductId(id);
+		Iterable<Question> questions = questionRepository.findByProductId(id);
+		
+		return ResponseEntity.ok(new DetailProductDto(product.get(), questions, opinions));
 	}
 }

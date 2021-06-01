@@ -9,6 +9,8 @@ import javax.validation.constraints.NotBlank;
 
 import com.sun.istack.NotNull;
 
+import br.com.zup.mercado.dto.FeaturesDto;
+
 @Entity
 public class ProductFeature {
 	
@@ -59,4 +61,7 @@ public class ProductFeature {
 		this.description = description;
 	}
 
+	public FeaturesDto toModel() {
+		return new FeaturesDto(this);
+	}
 }

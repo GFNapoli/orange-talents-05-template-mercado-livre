@@ -115,6 +115,10 @@ public class Product {
 		return user;
 	}
 
+	public Set<ProductImages> getImages() {
+		return images;
+	}
+
 	public void addImages(Set<String> urls, ImagesForm form) {
 		
 		this.images.addAll(urls.stream().map(image -> form.toModel(image, this)).collect(Collectors.toSet()));

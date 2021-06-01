@@ -6,4 +6,6 @@ import br.com.zup.mercado.entity.Opinion;
 
 public interface OpinionRepository extends CrudRepository<Opinion, Long>{
 
+	Iterable<Opinion> findByProductId(Long id);
+
 }

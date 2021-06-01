@@ -27,7 +27,17 @@ public class Category {
 
 	public Category() {
 	}
-	
-	
+
+	public Long getId() {
+		return id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public Category getCategory() {
+		return category;
+	}
 	
 }
