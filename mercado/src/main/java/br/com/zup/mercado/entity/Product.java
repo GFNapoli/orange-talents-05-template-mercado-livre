@@ -125,4 +125,11 @@ public class Product {
 		
 	}
 	
+	public Boolean attQuantity(Integer quantity) {
+		if(this.quantity < quantity) return false;
+		
+		this.quantity -= quantity;
+		return true;
+	}
+	
 }

@@ -96,7 +96,6 @@ public class ProductController {
 		
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		String userLogin = ((UserDetails)principal).getUsername();
-		System.out.println("gustavo -> " + userLogin.equalsIgnoreCase(product.get().getUser().getLogin()) );
 		if(!userLogin.equalsIgnoreCase(product.get().getUser().getLogin())) return ResponseEntity.badRequest().build();
 		
 		product.get().addImages(urls, form);
