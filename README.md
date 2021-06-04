@@ -8,6 +8,6 @@
 - [x] Adiciona imagem produto
 - [x] Adiciona opiniao sobre produto
 - [x] Faça uma pergunta
-- [ ] Codigo para pagina detalhe
-- [ ] Finaliza compra parte 1
-- [ ] Finaliza compra parte 2
+- [x] Codigo para pagina detalhe
+- [x] Finaliza compra parte 1
+- [x] Finaliza compra parte 2
